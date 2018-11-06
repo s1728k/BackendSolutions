@@ -1,0 +1,189 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h3>Modify Table</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<form>
+				<div class="form-group">
+					<label for="db_name">Database Name</label>
+					<select id="db_name" name="db_name" class="form-control" (change)="onDatabaseSelect(selTable['database_name'])"
+					 [(ngModel)]="selTable['database_name']">
+						<option *ngFor="let free_database of free_databases" value="{{free_database.name}}">{{free_database.name}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="table_name">Table Name</label>
+					<select id="db_name" name="db_name" class="form-control" (change)="onTableSelect(selTable['table_name'])"
+					 [(ngModel)]="selTable['table_name']">
+						<option *ngFor="let my_table of my_table_list" value="{{my_table.table_name}}">{{my_table.table_name}}</option>
+					</select>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<form>
+				<div class="form-group">
+					<label for="table_description">Table Description</label>
+					<textarea id="table_description" rows="5" name="table_description" class="form-control" [(ngModel)]="selTable['table_description']"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="keywords">Key Words</label>	
+					<input id="keywords" name="keywords" class="form-control" [(ngModel)]="selTable['keywords']">
+					<p>* maximum of 5 comma separated keywords are accepted.</p>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				<label for="del_fields">Enter The Comma Separated Column Names To Be Deleted.</label>
+				<textarea id="del_fields" name="del_fields" class="form-control" [(ngModel)]="selTable['delete_fields']"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+				<table class="table">
+					<caption>Choose The Table Fields To Add To Table "{{selTable['table_name']}}"</caption>
+					<p>* optional fields</p>
+					<thead>
+						<tr>
+							<th><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFiSURBVGhD7Zk5TgNBEEUnAyJEynoqApBI2S4ACVsEV8DcBMQNSOAuQAa8HyB9jVrqmfbSLaue9JK2q6a+pbGtqS4IgqnYxVt8xbdK6tqaQbMUcY5f+NuImuUMR3GKqWYtqNkGsYPfmGrSgp+4jVnu0At/cIIHuL9gdc0n1Aw+0zVmeUEvesTa6IP0mTRjlnf0oiOsjWbwmTRjlg/0okOsjWbwmTRjllkFWcGLnjoroWqQdfQ+UmclRBAviiDofWQEQe8TQUqIIAkiiBf1g6zixgD30PtInaXe23cNnbkEuUR/fR7eoxNBvCiCTOFCgizNzT6U+B1JEEG8KIKg95ERBL1PBCkhgiSoGkT/AB566qyEqkFmSVGQpXmI3eJaQTsSn+kZs2jx6EVasqhRS4ueK8yi1VtLS9C+Wr1t4SBaXoYe4yhOsLX19OgQ/2h7eoP6Akgt8xehrq17YhODICii6/4AKeYLm3RM7hQAAAAASUVORK5CYII=" (click)="addNewField()"></th>
+							<th>Field Name</th>
+							<th>Datatype</th>
+							<th>Modifier*</th>
+							<th>Index*</th>
+							<th>Add Field To Array</th>
+							<th>Remove</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let item of selTable.fields;  let i=index;">
+							<td>{{i+1}}</td>
+							<td>
+								<div class="form-group">
+									<input type="text" name="table_name{{i}}" class="form-control" [(ngModel)]="selTable.fields[i]['field_name']" />
+								</div>
+							</td>
+							<td>
+								<div class="form-group">
+									<select name="data_type" class="form-control" [(ngModel)]="selTable.fields[i]['data_type']">
+										<option *ngFor="let data_type of data_types" value="{{data_type.name}}">{{data_type.name}}</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-group">
+									<select name="data_type_modifiers" class="form-control" (change)="modifierInput(i)" [(ngModel)]="selTable.fields[i]['data_type_modifier']['name']">
+										<option *ngFor="let data_type_modifier of data_type_modifiers" value="{{data_type_modifier.name}}" 
+										>{{data_type_modifier.name}}</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-group">
+									<select name="my_sql_indexes" class="form-control" (change)="sqlIndexInput(i)" [(ngModel)]="selTable.fields[i]['my_sql_index']['name']">
+										<option *ngFor="let my_sql_index of my_sql_indexes" value="{{my_sql_index.name}}">{{my_sql_index.name}}</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-group">
+									<select name="elequent_array" class="form-control" [(ngModel)]="selTable.fields[i]['elequent_array']">
+										<option value="visibles">visibles</option>
+										<option value="hidden">hidden</option>
+										<option value="both">both</option>
+									</select>
+								</div>
+							</td>
+							<td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEjSURBVGhD7Zk9agJRFIVnB1bBbWgR12FrbZAUgq21ja7AXkvLtJaWCWQBWYZ2gSTnwBMuj4fj6H0zYTwffM3lvJ8DU70phBDi4XmF+xKZ+ddM4Q/8LZEZZhvhBe4u+AavKXGWWa5J7XWWZ7qzhqkL5ZRnuqMid5ilyBCuapZnijJ6cJLZAczOHKa+Z0+XMDsqUkEVqULrixzhh/ETxhnObIZr4gxttMgBWjowznBm4Zo4Q1WkCioSZhYV8UBFwsyiIh6oSJhZVMQDFQkzi4p4oCJhZlERD1pf5AvaR7YZjDOc2QzXxBnaaBFPW1NkAbPDv0ipwz0dw+x04QmmLuAhn4ieYC2M4DdMXeQeuSf3rpVnuIXv0D663SL32MA+FEK4UxR/dgb0zufBmgUAAAAASUVORK5CYII=" (click)="removeField(i)"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div id="modifierInputModel" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Input For Modifier</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+			<input type="text" name="input_for_modifier" class="form-control" 
+			[(ngModel)]="selTable['fields'][mi]['data_type_modifier']['value']" />
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="afterModifierInputModel" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Select The After Field</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+			<!-- <input type="text" name="input_for_modifier" class="form-control" [(ngModel)]="data_type_modifier_value" /> -->
+			<select name="after_field" class="form-control" [(ngModel)]="selTable['fields'][mi]['data_type_modifier']['value']">
+				<option *ngFor="let item of selTable['fields']" value="item['field_name']">{{item['field_name']}}</option>
+			</select>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="sqlIndexInputModel" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="sqlIndexDialogResult()">&times;</button>
+        <h4 class="modal-title">Input For SQL Index</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+			<input type="text" name="input_for_modifier" class="form-control" 
+			[(ngModel)]="selTable['fields'][si]['my_sql_index']['value']" />
+		</div>
+		<p>* For composite values you may enter values separated by commas</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="sqlIndexDialogResult()">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

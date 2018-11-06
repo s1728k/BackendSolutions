@@ -1,0 +1,10 @@
+th, td{
+	min-width:200px;
+	&:nth-child(1){
+		min-width:25px;
+	}
+	img{
+		width:25px;
+		height:25px;
+	}
+}
